@@ -13,19 +13,20 @@
     body, html {
       margin: 0;
       padding: 0;
-      height: 100vh; /* Example to make the page scrollable */
+      height: 500vh;
       z-index: 10;
-      background-color: black;
+      background-color: white;
     }
 
     #p5-canvas {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 200; /* Make sure this is on top */
-      pointer-events: none; /* Allows clicks to pass through */
+      width: 100vw;
+      height: 100vh;
+      z-index: 200;
+      pointer-events: none;
+      background: transparent;
     }
 
     #three-canvas {
@@ -34,22 +35,22 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 101; /* Below p5.js */
+      z-index: 40000;
+      transform: translateY(-100%);
+      opacity: 0;
     }
 
     .scroll-down {
       position: fixed;
       top: 90%;
       left: 50%;
-      src: url(assets/TINY.ttf);
-      font-family: 'tiny';
       transform: translateX(-50%);
       color: white;
       padding: 10px 20px;
       font-size: 24px;
       font-weight: bold;
       z-index: 103;
-      opacity: 0; /* Początkowo ukryty */
+      opacity: 0;
       transition: opacity 0.5s ease;
     }
 
@@ -73,11 +74,113 @@
     .link-element:nth-child(3) {
       text-align: right;
     }
+
+    .container {
+      margin: 20px;
+    }
+
+    #typewriter {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: black;
+      font-size: 120px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 400;
+      z-index: 300;
+    }
+
+    #black-screen {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 400;
+      transform: translateY(100%);
+    }
+
+    .footer-container {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 96%;
+      margin-left: 2%;
+      margin-bottom: 1%;
+      color: black;
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      z-index: 500;
+    }
+
+    .footer-container > div:nth-child(1) {
+      text-align: left;
+    }
+
+    .footer-container > div:nth-child(2) {
+      text-align: center;
+    }
+
+    .footer-container > div:nth-child(3) {
+      text-align: right;
+    }
+
+    .footer-container > div.margin-div {
+      margin-right: 20px;
+    }
   </style>
-  <script type="module" crossorigin src="/Website/assets/index-kTF80n06.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+  <script type="module" crossorigin src="/Website/assets/index-DWE6UrVK.js"></script>
 </head>
 <body>
   <div id="three-canvas"></div>
-  <div id="p5-canvas"></div>
-  <div id="scroll-down" class="scroll-down">Scroll Down</div> <!-- Dodany element -->
+    
+  <div id="black-screen"></div>
+  <div class="footer-container" id="footer-text">
+    <div>
+      Wooki.obj<br>
+      Łukasz Biernacki<br>
+      Based in Warsaw
+    </div>
+    <div>
+      Services:<br>
+      3D / MOTION / ART DIRECTION /<br>
+      CREATIVE CODING / EDITING
+    </div>
+    <div>
+      ON THE<br>
+      ROAD TO<br>
+      BE GOAT
+    </div>
+  </div>
+  <!-- <script type="module" src="/src/main.js"></script> -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      setTimeout(() => {
+        gsap.to("#three-canvas", { y: "0%", opacity: 1, duration: 1.5, ease: "power2.out" });
+      }, 3000);
+      
+
+      // Black screen slides up from bottom to top and text color changes immediately after starting animation
+      setTimeout(() => {
+        gsap.to("#black-screen", {
+          y: "0%", 
+          duration: 1, 
+          ease: "power4.out",
+          onStart: () => {
+            gsap.to(".footer-container", {
+              color: "white",
+              duration: 0,
+              ease: "power4.out"
+            });
+          }
+        });
+      }, 3000);
+    });
+  </script>
+  <div id="wooki-text" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-size: 100px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; z-index: 500;">Wooki</div>
+</body>
 </html>
