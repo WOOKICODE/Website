@@ -2,184 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Three.js and p5.js with Vite</title>
   <style>
-    * {
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 600;
+    /* Ustawienia globalne */
+
+    @font-face {
+      font-family: helvetica;
+      font-weight: bold;
+      src: url("/assets/HelveticaNeueBold-PoMR7CfD.ttf") format("opentype");
     }
-    body, html {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      height: 500vh;
-      z-index: 10;
-      background-color: white;
+      font-family: helvetica;
+      font-weight: 600;
     }
 
-    #p5-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 200;
-      pointer-events: none;
-      background: transparent;
+    body, html {
+      width: 100%;
+      background-color: black;
+      background-position: 0px 15%;
+      overflow: hidden; /* Zapobiega przewijaniu, jeśli nie jest potrzebne */
+      position: relative;
+      z-index: -20;
     }
 
-    #three-canvas {
+    /* Górny kontener z menu */
+    .top-container {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      z-index: 40000;
-      transform: translateY(-100%);
-      opacity: 0;
+      z-index: 300; /* Na wierzchu wszystkich innych elementów */
+      margin-top: 5px;
     }
 
-    .scroll-down {
-      position: fixed;
-      top: 90%;
-      left: 50%;
-      transform: translateX(-50%);
-      color: white;
-      padding: 10px 20px;
-      font-size: 24px;
-      font-weight: bold;
-      z-index: 103;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-
-    .links {
-      position: fixed;
-      z-index: 102;
+    .menu {
       display: flex;
-      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%; /* Maksymalna szerokość menu */
+      margin: 0 auto; /* Wyśrodkowanie menu */
     }
 
-    .link-element {
-      width: 33.3%;
+    .menu-item {
       color: white;
-      padding: 10px;
+      text-decoration: none;
+      font-size: 40px;
+      padding: 10px 15px;
     }
 
-    .link-element:nth-child(2) {
-      text-align: center;
+    .menu-item:hover {
+      text-decoration: underline;
     }
 
-    .link-element:nth-child(3) {
-      text-align: right;
-    }
-
-    .container {
-      margin: 20px;
-    }
-
-    #typewriter {
+    /* Przykładowy styl dla elementu tekstowego */
+    .text {
       position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: black;
-      font-size: 120px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 400;
-      z-index: 300;
+      color: white;
+      font-size: 60px;
+      z-index: 10; /* Pomiędzy Three.js a p5.js */
     }
 
-    #black-screen {
+    .content {
+      width: 100%;
+      height: 100vh;
       position: fixed;
-      bottom: 0;
+    }
+
+    /* Logo na środku */
+    .logo {
+      justify-self: center;
+      color: white;
+      font-size: 3.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 30px;
+      letter-spacing: -5px;
+    }
+
+    /* Stopka */
+    .footer_bot {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 20px 30px;
+      align-self: flex-end;
+      color: white;
+    }
+
+    .footer-text {
+      align-self: flex-end;
+      color: white;
+      margin-bottom: 10px;
+      font-size: 40px;
+      letter-spacing: -1.5px;
+    }
+
+    .footer-text a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: none;
+    }
+
+    /* Styl dla SVG tła */
+    /* Styl dla SVG tła */
+    #background-svg {
+      position: fixed;
+      top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: black;
-      z-index: 400;
-      transform: translateY(100%);
+      z-index: -10; /* Umieszcza SVG pod wszystkim innym */
+      pointer-events: none; /* Zapobiega interakcji z myszką */
+      animation: rotate-bg 100s linear infinite;
     }
 
-    .footer-container {
+    /* Canvas Three.js */
+    #three-canvas {
       position: fixed;
-      bottom: 0;
+      top: 0;
       left: 0;
-      width: 96%;
-      margin-left: 2%;
-      margin-bottom: 1%;
-      color: black;
-      display: flex;
-      justify-content: space-between;
-      font-size: 16px;
-      z-index: 500;
+      z-index: 5111; /* Canvas na wierzchu SVG */
     }
-
-    .footer-container > div:nth-child(1) {
-      text-align: left;
-    }
-
-    .footer-container > div:nth-child(2) {
-      text-align: center;
-    }
-
-    .footer-container > div:nth-child(3) {
-      text-align: right;
-    }
-
-    .footer-container > div.margin-div {
-      margin-right: 20px;
+    /* Animacja obracania SVG */
+    @keyframes rotate-bg {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
   </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-  <script type="module" crossorigin src="/assets/index-DWE6UrVK.js"></script>
+  <script type="module" crossorigin src="/assets/index-DMyJRMjc.js"></script>
 </head>
 <body>
+  <!-- SVG w tle -->
+  <div id="background-svg"></div>
+
+  <!-- Canvasy Three.js i p5.js -->
   <div id="three-canvas"></div>
-    
-  <div id="black-screen"></div>
-  <div class="footer-container" id="footer-text">
-    <div>
-      Wooki.obj<br>
-      Łukasz Biernacki<br>
-      Based in Warsaw
-    </div>
-    <div>
-      Services:<br>
-      3D / MOTION / ART DIRECTION /<br>
-      CREATIVE CODING / EDITING
-    </div>
-    <div>
-      ON THE<br>
-      ROAD TO<br>
-      BE GOAT
+  <div class="content">
+    <!-- Logo -->
+    <div class="logo">
     </div>
   </div>
-  <!-- <script type="module" src="/src/main.js"></script> -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      setTimeout(() => {
-        gsap.to("#three-canvas", { y: "0%", opacity: 1, duration: 1.5, ease: "power2.out" });
-      }, 3000);
-      
 
-      // Black screen slides up from bottom to top and text color changes immediately after starting animation
-      setTimeout(() => {
-        gsap.to("#black-screen", {
-          y: "0%", 
-          duration: 1, 
-          ease: "power4.out",
-          onStart: () => {
-            gsap.to(".footer-container", {
-              color: "white",
-              duration: 0,
-              ease: "power4.out"
-            });
-          }
+  <!-- Stopka -->
+  <div class="footer_bot">
+    <p class="footer-text">WOOKI.TM</p>
+    <p class="footer-text">2025</p>
+  </div>
+
+  <!-- Główny skrypt aplikacji -->
+
+  <!-- Skrypt do dynamicznego ładowania SVG -->
+  <script>
+    const svgContainer = document.getElementById('background-svg');
+
+    // Załaduj plik SVG do kontenera
+    fetch('assets/star.svg')
+      .then((response) => response.text())
+      .then((svg) => {
+        svgContainer.innerHTML = svg;
+
+        // Po załadowaniu SVG można dodać animacje i interakcje
+        const svgElement = svgContainer.querySelector('svg');
+        svgElement.style.width = '150%';
+        svgElement.style.height = '150%';
+
+        // Animacja i interakcja z myszką
+        window.addEventListener('mousemove', (e) => {
+          const mouseX = e.clientX / window.innerWidth - 7.5;
+          const mouseY = e.clientY / window.innerHeight - 4;
+
+          svgElement.style.transform = `translate(${mouseX * 50}px, ${mouseY * 50}px) rotate(360deg)`;
         });
-      }, 3000);
-    });
+      })
+      .catch((error) => console.error('Błąd ładowania SVG:', error));
   </script>
-  <div id="wooki-text" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); color: black; font-size: 100px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; z-index: 500;">Wooki</div>
 </body>
 </html>
