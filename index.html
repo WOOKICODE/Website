@@ -174,7 +174,7 @@
     const svgContainer = document.getElementById('background-svg');
 
     // Załaduj plik SVG do kontenera
-    fetch('assets/star.svg')
+    fetch('./assets/star.svg')
       .then((response) => response.text())
       .then((svg) => {
         svgContainer.innerHTML = svg;
