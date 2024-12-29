@@ -146,7 +146,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-DMyJRMjc.js"></script>
+  <script type="module" crossorigin src="/assets/index-Bb1ZIlZR.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-DqNgp2bC.js">
 </head>
 <body>
   <!-- SVG w tle -->
@@ -180,13 +181,13 @@
 
         // Po załadowaniu SVG można dodać animacje i interakcje
         const svgElement = svgContainer.querySelector('svg');
-        svgElement.style.width = '150%';
-        svgElement.style.height = '150%';
+        svgElement.style.width = '200%';
+        svgElement.style.height = '200%';
 
         // Animacja i interakcja z myszką
         window.addEventListener('mousemove', (e) => {
-          const mouseX = e.clientX / window.innerWidth - 7.5;
-          const mouseY = e.clientY / window.innerHeight - 4;
+          const mouseX = e.clientX / window.innerWidth - 15;
+          const mouseY = e.clientY / window.innerHeight - 8;
 
           svgElement.style.transform = `translate(${mouseX * 50}px, ${mouseY * 50}px) rotate(360deg)`;
         });
