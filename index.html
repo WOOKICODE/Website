@@ -23,7 +23,7 @@
 
     body, html {
       width: 100%;
-      background-color: black;
+      background-color: rgb(111, 111, 111);
       background-position: 0px 15%;
       overflow: hidden; /* Zapobiega przewijaniu, jeśli nie jest potrzebne */
       position: relative;
@@ -104,7 +104,7 @@
       color: white;
       margin-bottom: 10px;
       font-size: 40px;
-      letter-spacing: -1.5px;
+      letter-spacing: -3px;
     }
 
     .footer-text a {
@@ -124,9 +124,19 @@
       left: 0;
       width: 100%;
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       z-index: -10; /* Umieszcza SVG pod wszystkim innym */
+      overflow: hidden;
       pointer-events: none; /* Zapobiega interakcji z myszką */
-      animation: rotate-bg 100s linear infinite;
+    }
+
+    #background-svg svg {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Dopasowanie SVG do kontenera */
+      transform-origin: center;
     }
 
     /* Canvas Three.js */
@@ -146,12 +156,11 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-Bb1ZIlZR.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DqNgp2bC.js">
+  <script type="module" crossorigin src="/assets/index-CDzuYBun.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-CkB1YQyW.js">
 </head>
 <body>
   <!-- SVG w tle -->
-  <div id="background-svg"></div>
 
   <!-- Canvasy Three.js i p5.js -->
   <div id="three-canvas"></div>
@@ -169,30 +178,5 @@
 
   <!-- Główny skrypt aplikacji -->
 
-  <!-- Skrypt do dynamicznego ładowania SVG -->
-  <script>
-    const svgContainer = document.getElementById('background-svg');
-
-    // Załaduj plik SVG do kontenera
-    fetch('./assets/star.svg')
-      .then((response) => response.text())
-      .then((svg) => {
-        svgContainer.innerHTML = svg;
-
-        // Po załadowaniu SVG można dodać animacje i interakcje
-        const svgElement = svgContainer.querySelector('svg');
-        svgElement.style.width = '200%';
-        svgElement.style.height = '200%';
-
-        // Animacja i interakcja z myszką
-        window.addEventListener('mousemove', (e) => {
-          const mouseX = e.clientX / window.innerWidth - 15;
-          const mouseY = e.clientY / window.innerHeight - 8;
-
-          svgElement.style.transform = `translate(${mouseX * 50}px, ${mouseY * 50}px) rotate(360deg)`;
-        });
-      })
-      .catch((error) => console.error('Błąd ładowania SVG:', error));
-  </script>
 </body>
 </html>
