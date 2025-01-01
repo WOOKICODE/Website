@@ -10,13 +10,13 @@
     @font-face {
       font-family: helvetica;
       font-weight: bold;
-      src: url("/assets/HelveticaNeueBold-PoMR7CfD.ttf") format("opentype");
+      src: url("/assets/HelveticaNeueBold-PoMR7CfD-PoMR7CfD.ttf") format("opentype");
     }
 
     @font-face {
       font-family: helvetica;
       font-weight: 500;
-      src: url("/assets/HelveticaNeue-Medium-sDfiWtXx.otf") format("opentype");
+      src: url("/assets/HelveticaNeue-Medium-sDfiWtXx-sDfiWtXx.otf") format("opentype");
     }
 
     * {
@@ -192,8 +192,8 @@
       }
     }
   </style>
-  <script type="module" crossorigin src="/assets/index-B5RAUVSA.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DA3NTc3T.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-DA3NTc3T-D7PbWmSR.js">
+  <script type="module" crossorigin src="/assets/index-TcUwbhZ3.js"></script>
 </head>
 <body>
   <!-- Popup Overlay -->
@@ -223,7 +223,7 @@
         </p>
       </div>
       <div class="image-container">
-        <img style="margin-bottom: 30px;" src="/assets/MOODBOARD-d7WNx_Vw.jpg" alt="Obrazek Popupu" id="popup-image">
+        <img style="margin-bottom: 30px;" src="/assets/MOODBOARD-d7WNx_Vw-d7WNx_Vw.jpg" alt="Obrazek Popupu" id="popup-image">
       </div>
     </div>
   </div>
@@ -242,41 +242,44 @@
 
   <!-- Skrypt do obsługi popupu -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const popup = document.getElementById('popup-overlay');
-      const closeBtn = document.getElementById('close-popup');
+   document.addEventListener('DOMContentLoaded', function() {
+  const popup = document.getElementById('popup-overlay');
+  const closeBtn = document.getElementById('close-popup');
 
-      // Funkcja otwierająca popup
-      function openPopup() {
-        console.log('Otwieranie popupu');
-        popup.classList.add('active');
-        document.body.style.overflow = 'auto'; // Włącza przewijanie
-      }
+  // Funkcja otwierająca popup
+  function openPopup() {
+    console.log('Otwieranie popupu');
+    popup.classList.add('active');
+    document.body.style.overflow = 'auto'; // Włącza przewijanie
+  }
 
-      // Funkcja zamykająca popup
-      function closePopupFunc() {
-        console.log('Zamykanie popupu');
-        popup.classList.remove('active');
-        document.body.style.overflow = 'hidden'; // Przywraca ukryte przewijanie
-        popup.style.display = 'none';
-      }
+  // Funkcja zamykająca popup
+  function closePopupFunc() {
+    console.log('Zamykanie popupu');
+    popup.classList.remove('active');
+    document.body.style.overflow = 'hidden'; // Przywraca ukryte przewijanie
+    popup.style.display = 'none';
+  }
 
-      // Nasłuchiwanie na kliknięcie przycisku zamykającego
-      closeBtn.addEventListener('click', closePopupFunc);
+  // Nasłuchiwanie na kliknięcie i dotknięcie przycisku zamykającego
+  closeBtn.addEventListener('click', closePopupFunc);
+  closeBtn.addEventListener('touchend', closePopupFunc);
 
-      // Zamknięcie popupu przy kliknięciu poza treścią popupu
-      popup.addEventListener('click', function(event) {
-        if (event.target === popup) {
-          closePopupFunc();
-        }
-      });
+  // Zamknięcie popupu przy kliknięciu poza treścią popupu
+  popup.addEventListener('click', function(event) {
+    if (event.target === popup) {
+      closePopupFunc();
+    }
+  });
 
-      // Przykładowe otwieranie popupu po kliknięciu elementu menu
-      const menuItem = document.querySelector('.menu-item');
-      if (menuItem) {
-        menuItem.addEventListener('click', openPopup);
-      }
-    });
+  // Przykładowe otwieranie popupu po kliknięciu elementu menu
+  const menuItem = document.querySelector('.menu-item');
+  if (menuItem) {
+    menuItem.addEventListener('click', openPopup);
+    menuItem.addEventListener('touchend', openPopup);
+  }
+});
+
   </script>
 </body>
 </html>
