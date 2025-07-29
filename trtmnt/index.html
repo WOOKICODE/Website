@@ -2,284 +2,193 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
+  <title>WOOKI Treatment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WOOKI ORG</title>
   <style>
-    /* Ustawienia globalne */
-
-    @font-face {
-      font-family: helvetica;
-      font-weight: bold;
-      src: url("/assets/HelveticaNeueBold-PoMR7CfD-PoMR7CfD.ttf") format("opentype");
-    }
-
-    @font-face {
-      font-family: helvetica;
-      font-weight: 500;
-      src: url("/assets/HelveticaNeue-Medium-sDfiWtXx-sDfiWtXx.otf") format("opentype");
-    }
-
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: helvetica, sans-serif;
+      box-sizing: border-box;
+      font-family: sans-serif;
     }
 
     body, html {
-      width: 100%;
       height: 100%;
-      background-color: rgb(21, 21, 21);
-      background-position: 0px 15%;
-      overflow: hidden; /* Zapobiega przewijaniu, jeśli nie jest potrzebne */
-      position: relative;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background-color: #111;
+      color: white;
     }
 
-    /* Górny kontener z menu */
-    .top-container {
-      position: fixed;
-      top: 0;
-      left: 0;
+    .section {
+      height: 100vh;
       width: 100%;
-      z-index: 300; /* Na wierzchu wszystkich innych elementów */
-      margin-top: 5px;
-      padding: 10px 20px;
-    }
-
-    .menu {
       display: flex;
-      justify-content: flex-start;
       align-items: center;
-      max-width: 100%; /* Maksymalna szerokość menu */
-      margin: 0 auto; /* Wyśrodkowanie menu */
+      justify-content: center;
+      padding: 40px;
     }
 
-    .menu-item {
-      color: white;
-      text-decoration: none;
-      font-size: 40px;
-      padding: 10px 15px;
-      cursor: pointer;
-    }
-
-    .menu-item:hover {
-      text-decoration: underline;
-    }
-
-    /* Styl dla popupu */
-    #popup-overlay {
-      position: absolute; /* Pozostawiamy absolute */
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0); /* Lekko przezroczyste tło */
-      display: none; /* Ukryty domyślnie */
-      overflow: auto; /* Pozwala na przewijanie */
-      z-index: 6000; /* Wyższy niż wszystkie inne elementy */
-    }
-
-    #popup-overlay.active {
-      display: block;
-    }
-
-    /* Przycisk "X" w popupie */
-    .close-button {
-      position: fixed; /* Zmieniono na fixed */
-      top: 20px;
-      left: 20px;
-      color: white;
-      text-decoration: none;
-      font-size: 30px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: helvetica, sans-serif;
-      font-weight: bold;
-      z-index: 7000; /* Wyższy niż popup-overlay */
-    }
-
-    .close-button:hover {
-      color: red;
-    }
-
-    #popup-overlay .popup-content {
+    .video-section {
       position: relative;
-      width: 90%;
-      max-width: 800px;
-      margin: 50px auto; /* Wyśrodkowanie popupu z marginesem od góry */
-      padding: 20px;
-      background-color: rgba(0, 0, 0); /* Ciemne tło dla treści */
-      border-radius: 10px;
-      text-align: center;
-      color: white;
     }
 
-    /* Placeholder na obraz */
-    #popup-overlay .image-container {
-      margin-top: 20px;
-    }
-
-    #popup-overlay .image-container img {
-      width: 100%;
-      height: auto;
-      max-height: 600px;
-      object-fit: contain;
-      border-radius: 10px;
-    }
-
-    /* Canvas Three.js */
-    #three-canvas {
-      position: fixed;
+    .video-section video {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 5111; /* Canvas na wierzchu SVG */
+      object-fit: cover;
+      z-index: 1;
     }
 
-    /* Animacja obracania SVG */
-    @keyframes rotate-bg {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* Stopka */
-    .footer_bot {
+    .logo {
       position: fixed;
-      bottom: 0;
+      top: 20px;
+      left: 30px;
+      width: 150px;
+      height: 150px;
+      font-size: 24px;
+      font-weight: bold;
+      padding: 8px 12px;
+      border-radius: 5px;
+      z-index: 10;
+    }
+
+    .logo img {
       width: 100%;
-      display: flex;
-      justify-content: space-between;
-      padding: 20px 30px;
-      color: white;
-      z-index: 300;
     }
 
-    .footer-text {
-      color: white;
+    .mute-button {
+      position: fixed;
+      top: 30px;
+      right: 60px;
       font-size: 40px;
-      letter-spacing: -2px;
-    }
-
-    .footer-text a {
+      z-index: 10;
+      border: none;
+      background: none;
+      text-decoration: underline;
       color: white;
-      text-decoration: none;
+      cursor: pointer;
     }
 
-    .footer-text a:hover {
-      text-decoration: none;
+    h1 {
+      font-size: 4rem;
     }
-    
 
-    /* Responsywne dostosowanie */
+    p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      line-height: 1.6;
+    }
+
+    .text-section {
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+
+    .text-section > div {
+      margin-left: 50px;
+      text-align: left;
+    }
+
+    .text-section h2 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+
+    .text-section p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
     @media (max-width: 768px) {
-      .menu-item {
-        font-size: 30px;
-        padding: 8px 10px;
-      }
-
-      .footer-text {
-        font-size: 30px;
-      }
-
-      .close-button {
-        font-size: 25px;
-      }
+    .video-section video{
+      object-fit: contain;
     }
+    .section {
+      padding: 20px;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+    }
+
+    .text-section h2 {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+    }
+
+    .text-section p {
+      font-size: 1rem;
+      max-width: 90vw;
+    }
+
+    .text-section > div {
+      margin-left: 0;
+      padding: 0 10px;
+      text-align: left;
+    }
+
+    .logo {
+      position: fixed;
+      width: 100px;
+      height: 100px;
+      top: 10px;
+      left: 15px;
+    }
+
+    .mute-button {
+      font-size: 24px;
+      top: 20px;
+      right: 20px;
+    }
+  }
+
   </style>
-  <link rel="modulepreload" crossorigin href="/assets/vendor-DA3NTc3T-D7PbWmSR.js">
-  <script type="module" crossorigin src="/assets/index-TcUwbhZ3.js"></script>
 </head>
 <body>
-  <!-- Popup Overlay -->
-  <div id="popup-overlay">
-    <button class="close-button" id="close-popup">&times;</button>
-    <div class="popup-content">
-      <div class="text-content">
-        <h2 style="text-align:left; font-size: 3rem; margin-bottom: 10px;">Yo! Witam w nowym roku.</h2>
-        <p style="text-align: left;">
-          Ten rok zaczyna się dla mnie z kopyta bo rzuciłem prace na etacie.
-          Znudziła mnie branża reklamowa, brak elastyczności i toporność,
-          a ja jestem głodny innowacyjnych i świeżych projektów.
-          Moją misją jest wnieść trochę powiewu świeżości i jakości do polskiej komercji,
-          więc ten rok poświęcam na gonieniem za marzeniami.
-        </br>        </br>
-          Wysyłam do Was ten Treatment, bo chcę w pierwszej kolejności zaprosić Was do współpracy.
-          Moim main skillem jest 3D i animacja, cały czas szlifuje video,
-          i w 2025 postaram się wrócić do muzyki.
-          Chcę się postrzegać jako multidyscyplinarny artysta,
-          a każdy projekt czy collabo jaką nową energię i spostrzeżenia. 
-        </br>        </br>
-          Chcę realizować dopięte animacje 3D, nieszablonowe VFX,
-          strony internetowe z elementami 3D. Generalnie przesuwać poprzeczkę,
-          wykorzystując technologię. Załączam mały moodboard.
-        </br>        </br>
-          Pzdr
-        </p>
-      </div>
-      <div class="image-container">
-        <img style="margin-bottom: 30px;" src="/assets/MOODBOARD-d7WNx_Vw-d7WNx_Vw.jpg" alt="Obrazek Popupu" id="popup-image">
-      </div>
+
+  <!-- Przycisk mute -->
+  <button class="mute-button" onclick="toggleMute()">MUTE</button>
+
+  <!-- Sekcja z wideo -->
+  <div class="section video-section">
+    <div class="logo"><img src="/LOGO.png" alt="WOOKI Logo"></div>
+    <video id="bgVideo" src="/VIDEO.mp4" autoplay muted loop></video>
+  </div>
+
+  <!-- Sekcja tekstowa 1 -->
+  <div class="section text-section">
+    <div>
+      <h2>Po głowie chodzi mi kolażowa animacje w stylu lircs video, w UK huczy od kreatywnych klipów, a w Polsce od dłuższego czasu nic ciekawego się nie dzieje oprócz bujanki przed kamerą.</h2>
+      <img src="/MOOD_001.png" alt="">
     </div>
   </div>
 
-  <!-- Canvasy Three.js i p5.js -->
-  <div id="three-canvas"></div>
-  <!-- Usunięto div z klasą "logo" -->
-
-  <!-- Stopka -->
-  <div class="footer_bot">
-    <p class="footer-text">WOOKI.TM</p>
-    <p class="footer-text">2025</p>
+  <!-- Sekcja tekstowa 2 -->
+  <div class="section text-section">
+    <div>
+      <h2>Nowa jakość wizji</h2>
+      <p>
+        Nasze projekty przekraczają granice formatów — animacje, klipy, koncepty kampanii. 
+        Wierzymy, że przyszłość to synteza technologii, sztuki i ulicy. Dlatego nasze treatmenty są 
+        punktem wyjścia do czegoś większego niż brief.
+      </p>
+    </div>
   </div>
 
-  <!-- Główny skrypt aplikacji -->
-
-  <!-- Skrypt do obsługi popupu -->
   <script>
-   document.addEventListener('DOMContentLoaded', function() {
-  const popup = document.getElementById('popup-overlay');
-  const closeBtn = document.getElementById('close-popup');
-
-  // Funkcja otwierająca popup
-  function openPopup() {
-    console.log('Otwieranie popupu');
-    popup.classList.add('active');
-    document.body.style.overflow = 'auto'; // Włącza przewijanie
-  }
-
-  // Funkcja zamykająca popup
-  function closePopupFunc() {
-    console.log('Zamykanie popupu');
-    popup.classList.remove('active');
-    document.body.style.overflow = 'hidden'; // Przywraca ukryte przewijanie
-    popup.style.display = 'none';
-  }
-
-  // Nasłuchiwanie na kliknięcie i dotknięcie przycisku zamykającego
-  closeBtn.addEventListener('click', closePopupFunc);
-  closeBtn.addEventListener('touchend', closePopupFunc);
-
-  // Zamknięcie popupu przy kliknięciu poza treścią popupu
-  popup.addEventListener('click', function(event) {
-    if (event.target === popup) {
-      closePopupFunc();
+    function toggleMute() {
+      const video = document.getElementById('bgVideo');
+      video.muted = !video.muted;
     }
-  });
-
-  // Przykładowe otwieranie popupu po kliknięciu elementu menu
-  const menuItem = document.querySelector('.menu-item');
-  if (menuItem) {
-    menuItem.addEventListener('click', openPopup);
-    menuItem.addEventListener('touchend', openPopup);
-  }
-});
-
   </script>
+
 </body>
 </html>
