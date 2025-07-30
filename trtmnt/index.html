@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>WOOKI Treatment</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <style>
     * {
       margin: 0;
@@ -14,8 +15,7 @@
 
     body, html {
       height: 100%;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
+      overflow: hidden;
       background-color: #111;
       color: white;
     }
@@ -49,16 +49,10 @@
       left: 30px;
       width: 150px;
       height: 150px;
-      font-size: 24px;
-      font-weight: bold;
-      padding: 8px 12px;
-      border-radius: 5px;
-      z-index: 10;
+      z-index: 10001;
     }
 
-    .logo img {
-      width: 100%;
-    }
+    .logo img { width: 100%; }
 
     .mute-button {
       position: fixed;
@@ -73,126 +67,235 @@
       cursor: pointer;
     }
 
-    h1 {
-      font-size: 4rem;
+    /* POPUP */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: auto;
+      height: 150px;
+      background: #D9D9D9;
+      border: dotted 2px black;
+      color: black;
+      z-index: 9999;
+      padding: 15px;
+      align-items: center;
+      cursor: pointer;
     }
 
-    p {
-      font-size: 1.2rem;
-      max-width: 800px;
-      line-height: 1.6;
+    .popup img {
+      width: 100px;
+      height: 100px;
+      margin-right: 5px;
     }
 
-    .text-section {
-      justify-content: flex-start;
-      align-items: flex-start;
+    .popup-content h3 {
+      font-size: 28px;
+      margin-bottom: 2px;
+      font-weight: bold;
     }
 
-    .text-section > div {
-      margin-left: 50px;
-      text-align: left;
-      width: 100%;
-    }
-
-    .text-section h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-    }
-
-    .text-section p {
-      font-size: 1.2rem;
-      max-width: 700px;
-      line-height: 1.6;
-    }
-    .text-section img {
-      width: 100%;
-    }
-
-    @media (max-width: 768px) {
-    .video-section video{
-      object-fit: contain;
-    }
-    .section {
-      padding: 20px;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
-
-    h1 {
-      font-size: 2rem;
-      text-align: center;
-    }
-
-    .text-section h2 {
-      font-size: 1.6rem;
+    .popup-content p {
+      font-weight: bold;
+      font-size: 20px;
       margin-bottom: 10px;
     }
 
-    .text-section p {
-      font-size: 1rem;
-      max-width: 90vw;
+    .counter {
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
     }
 
-    .text-section > div {
-      margin-left: 0;
-      padding: 0 10px;
+    /* OVERLAY */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      z-index: 10000;
+      color: white;
+      overflow-y: auto;
+      padding: 120px 20px 40px 20px;
+    }
+
+    .overlay-content {
+      max-width: 900px;
+      margin: 0 auto;
       text-align: left;
     }
 
-    .logo {
+    .overlay h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+    }
+
+    .overlay p {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
+
+    .gif-placeholder {
+      width: 100%;
+      height: 50vh;
+      background: #333;
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #888;
+      border: 2px dashed #555;
+    }
+
+    /* HOME BUTTON */
+    .home-button {
       position: fixed;
-      width: 100px;
-      height: 100px;
-      top: 10px;
-      left: 15px;
+      top: 30px;
+      right: 40px;
+      background: none;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      border: 2px solid white;
+      padding: 8px 16px;
+      cursor: pointer;
+      z-index: 10002;
+      transition: 0.3s ease;
     }
 
-    .mute-button {
-      font-size: 30px;
-      top: 40px;
-      right: 30px;
+    .home-button:hover {
+      background: white;
+      color: black;
     }
-  }
 
+    @media (max-width: 768px) {
+      .logo { width: 100px; height: 100px; }
+      .mute-button { display: none; }
+      .overlay p { font-size: 1rem; }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Logo -->
+  <div class="logo"><img src="/LOGO.gif" alt="WOOKI Logo"></div>
 
   <!-- Przycisk mute -->
   <button class="mute-button" onclick="toggleMute()">MUTE</button>
 
   <!-- Sekcja z wideo -->
   <div class="section video-section">
-    <div class="logo"><img src="assets/LOGO.gif" alt="WOOKI Logo"></div>
-    <video id="bgVideo" src="assets/VIDEO.mp4" autoplay muted loop></video>
+    <video id="bgVideo" autoplay muted loop playsinline>
+      <source src="/VIDEO.mp4" type="video/mp4" id="videoSource">
+    </video>
   </div>
 
-  <!-- Sekcja tekstowa 1 -->
-  <div class="section text-section">
-    <div>
-      <h2>Po głowie chodzi mi kolażowa animacje w stylu lircs video, w UKhuczy od kreatywnych klipów, a w Polsce od dłuższego czasunic ciekawego się nie dzieje oprócz bujanki przed kamerą.</h2>
-      <img src="assets/MOOD_001.png" alt="">
+  <!-- POPUP -->
+  <div class="popup" id="popup">
+    <img src="/DOCUMENT_ICON.png" alt="Icon">
+    <div class="popup-content">
+      <h3>TREATMENT</h3>
+      <p>GET IT NOW!!!</p>
+      <div class="counter" id="counter">You have 10s</div>
     </div>
   </div>
 
-  <!-- Sekcja tekstowa 2 -->
-  <div class="section text-section">
-    <div>
-      <h2>Nowa jakość wizji</h2>
+  <!-- OVERLAY – Treść -->
+  <div class="overlay" id="overlay">
+    <button class="home-button" id="homeBtn">HOME</button>
+    <div class="overlay-content">
+      <h1>WOOKI Treatment</h1>
       <p>
-        Nasze projekty przekraczają granice formatów — animacje, klipy, koncepty kampanii. 
-        Wierzymy, że przyszłość to synteza technologii, sztuki i ulicy. Dlatego nasze treatmenty są 
-        punktem wyjścia do czegoś większego niż brief.
+        Zainspirowany sceną UK, już od dłuższego czasu po głowie chodzi mi pomysł z Lyrics Video. 
+        Myślę, że jest to mega stylowe, mniej kosztowne niż produkcja klipu, bo mogę wykonać to we własnym zakresie. 
+        Aktualnie Lyrics Video może pełnoprawnie zastąpić klip. Wykorzystanie 3D + 2D daje mega plastyczne i ciekawe efekty.
       </p>
+      <div class="gif-placeholder">GIF Placeholder 1 (50vh)</div>
+      <p>
+        Brat effect – każda nutka na płycie ma lyric video, co jest 10/10 ruchem do płyty. Przywołanie czasów kiedy lyrics video były modne. 
+        Dodatkowo można to wykorzystać na trasie jako visualizer. Te klipy są tak oczojebne, że odpalając nutki na domówce z TV albo projektora, mamy dosłownie klub na chacie przez strobo jakie generuje. 
+        IMO totalnie trafione.
+      </p>
+      <div class="gif-placeholder">GIF Placeholder 2 (50vh)</div>
+      <p>
+        Korzystanie z estetyki bootlegowych lyrics video na IG i TikToku, CapCut style – przyciągające jak magnes animacje. 
+        Tyler, The Creator rzeczami do "Don't Tap the Glass" poszedł w tym kierunku, jest to ciekawy mix CapCut i wizji Jamiroquai.
+      </p>
+      <div class="gif-placeholder">GIF Placeholder 3 (50vh)</div>
     </div>
   </div>
+<script>
+  function toggleMute() {
+    const video = document.getElementById('bgVideo');
+    video.muted = !video.muted;
+  }
 
-  <script>
-    function toggleMute() {
-      const video = document.getElementById('bgVideo');
-      video.muted = !video.muted;
+  window.addEventListener('load', function () {
+    const source = document.getElementById('videoSource');
+    if (window.innerWidth <= 768) {
+      source.src = '/PION.mp4';
+      document.getElementById('bgVideo').load();
     }
-  </script>
+
+    const video = document.getElementById('bgVideo');
+    video.addEventListener('play', () => {
+      setTimeout(() => {
+        const popup = document.getElementById('popup');
+        popup.style.display = 'flex';
+
+        // 🔹 GSAP wejście popupu
+        gsap.fromTo(popup, 
+          {scale: 0.7, opacity: 0},
+          {scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)"}
+        );
+
+        // 🔹 Dodaj delikatny "shake" po 0.8s
+        setTimeout(() => {
+          gsap.fromTo(popup, 
+            {x: 0, y: 0},
+            {x: 3, y: 3, duration: 0.1, yoyo: true, repeat: 70, delay: 2, ease: "power1.inOut"}
+          );
+        }, 800);
+
+        // Licznik odliczania
+        let timeLeft = 10;
+        const counter = document.getElementById('counter');
+        counter.textContent = `You have ${timeLeft}s`;
+        const timer = setInterval(() => {
+          timeLeft--;
+          counter.textContent = `You have ${timeLeft}s`;
+          if(timeLeft <= 0){
+            clearInterval(timer);
+            popup.style.display = 'none';
+          }
+        }, 1000);
+
+        popup.addEventListener('click', () => {
+          clearInterval(timer);
+          popup.style.display = 'none';
+          document.getElementById('overlay').style.display = 'block';
+          document.body.style.overflow = 'auto';
+        });
+
+      }, 1000); // popup po 6 sekundach od startu wideo
+    });
+  });
+
+  // Obsługa przycisku HOME – zamykanie overlayu
+  document.addEventListener('click', function(e){
+    if(e.target.id === 'homeBtn'){
+      document.getElementById('overlay').style.display = 'none';
+      document.body.style.overflow = 'hidden';
+    }
+  });
+</script>
 
 </body>
 </html>
