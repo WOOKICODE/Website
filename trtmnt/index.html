@@ -185,7 +185,7 @@
 <body>
 
   <!-- Logo -->
-  <div class="logo"><img src="/LOGO.gif" alt="WOOKI Logo"></div>
+  <div class="logo"><img src="assets/LOGO.gif" alt="WOOKI Logo"></div>
 
   <!-- Przycisk mute -->
   <button class="mute-button" onclick="toggleMute()">MUTE</button>
@@ -193,13 +193,13 @@
   <!-- Sekcja z wideo -->
   <div class="section video-section">
     <video id="bgVideo" autoplay muted loop playsinline>
-      <source src="/VIDEO.mp4" type="video/mp4" id="videoSource">
+      <source src="assets/VIDEO.mp4" type="video/mp4" id="videoSource">
     </video>
   </div>
 
   <!-- POPUP -->
   <div class="popup" id="popup">
-    <img src="/DOCUMENT_ICON.png" alt="Icon">
+    <img src="assets/DOCUMENT_ICON.png" alt="Icon">
     <div class="popup-content">
       <h3>TREATMENT</h3>
       <p>GET IT NOW!!!</p>
@@ -240,7 +240,7 @@
   window.addEventListener('load', function () {
     const source = document.getElementById('videoSource');
     if (window.innerWidth <= 768) {
-      source.src = '/PION.mp4';
+      source.src = 'assets/PION.mp4';
       document.getElementById('bgVideo').load();
     }
 
